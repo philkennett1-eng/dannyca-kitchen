@@ -100,7 +100,11 @@
       {id:5, name:"Fish & Chips", price:8.99, desc:"British classic"},
     ];
 
-    const ADMIN_PASSWORD = "admin123";   // Change this to your real password
+    const ADMIN_PASSWORD = "admin123";   // ← Change this to your discreet password
+
+    function formatPrice(price) {
+      return "£" + price.toFixed(2);
+    }
 
     function renderMenu() {
       const container = document.getElementById('menu-container');
@@ -111,7 +115,7 @@
             <h3 class="font-semibold text-xl">${item.name}</h3>
             <p class="text-gray-600 text-sm mt-1">${item.desc}</p>
             <div class="mt-6 flex justify-between items-center">
-              <span class="text-3xl font-bold text-orange-600">£${item.price}</span>
+              <span class="text-3xl font-bold text-orange-600">${formatPrice(item.price)}</span>
               <button onclick="addToCart(${item.id})" class="bg-orange-600 text-white px-8 py-3 rounded-2xl hover:bg-orange-700">Add to Cart</button>
             </div>
           </div>`;
@@ -165,13 +169,13 @@
           <div class="flex justify-between items-center border-b pb-4">
             <div>
               <p class="font-medium">${item.name}</p>
-              <p class="text-sm text-gray-500">£${item.price.toFixed(2)}</p>
+              <p class="text-sm text-gray-500">${formatPrice(item.price)}</p>
             </div>
             <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700">Remove</button>
           </div>`;
       });
-      document.getElementById('subtotal').textContent = '£' + subtotal.toFixed(2);
-      document.getElementById('total').textContent = '£' + (subtotal + 3.99).toFixed(2);
+      document.getElementById('subtotal').textContent = formatPrice(subtotal);
+      document.getElementById('total').textContent = formatPrice(subtotal + 3.99);
     }
 
     function removeFromCart(index) {
@@ -203,15 +207,10 @@
 
       if (!name || isNaN(price)) return alert("Name and price are required");
 
-      menuItems.push({
-        id: Date.now(),
-        name: name,
-        price: price,
-        desc: desc || "No description"
-      });
-
+      menuItems.push({ id: Date.now(), name, price, desc: desc || "No description" });
       renderMenu();
       renderAdminMenu();
+
       document.getElementById('new-name').value = '';
       document.getElementById('new-price').value = '';
       document.getElementById('new-desc').value = '';
@@ -224,7 +223,7 @@
         list.innerHTML += `
           <div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl">
             <div>
-              <p class="font-medium">${item.name} — £${item.price}</p>
+              <p class="font-medium">${item.name} — ${formatPrice(item.price)}</p>
               <p class="text-sm text-gray-500">${item.desc}</p>
             </div>
             <button onclick="deleteItem(${index})" class="text-red-500 hover:text-red-700">Delete</button>
