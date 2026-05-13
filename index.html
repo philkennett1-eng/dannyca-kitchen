@@ -10,6 +10,8 @@
     .hero-bg { background-image: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34b4'); background-size: cover; }
     .menu-card { transition: all 0.3s; }
     .menu-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+    .toast { animation: slideUp 0.3s ease forwards; }
+    @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   </style>
 </head>
 <body class="bg-gray-50">
@@ -52,7 +54,7 @@
         <button onclick="toggleCart()" class="text-4xl text-gray-400 hover:text-black">×</button>
       </div>
 
-      <div id="cart-items" class="space-y-6 mb-8"></div>
+      <div id="cart-items" class="space-y-6 mb-8 min-h-[200px]"></div>
 
       <div class="border-t pt-6">
         <div class="flex justify-between text-lg mb-2">
@@ -60,7 +62,7 @@
           <span id="subtotal">£0.00</span>
         </div>
         <div class="flex justify-between text-lg">
-          <span id="fee-label">Delivery Fee</span>
+          <span>Delivery Fee</span>
           <span id="delivery-fee">£3.99</span>
         </div>
         <div class="flex justify-between text-2xl font-bold border-t pt-6 mt-6">
@@ -75,8 +77,15 @@
     </div>
   </div>
 
+  <!-- Toast Notification -->
+  <div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-2xl shadow-xl flex items-center gap-3 toast">
+    <i class="fas fa-check-circle text-green-400"></i>
+    <span id="toast-text"></span>
+  </div>
+
   <script>
     let cart = [];
+
     const menuItems = [
       {id:1, name:"Chicken Adobo", price:9.50, desc:"Classic Filipino garlic-soy chicken"},
       {id:2, name:"Sinigang na Baboy", price:10.50, desc:"Tamarind pork soup"},
@@ -104,12 +113,19 @@
       });
     }
 
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-text').textContent = message;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 2000);
+    }
+
     function addToCart(id) {
       const item = menuItems.find(i => i.id === id);
       if (item) {
         cart.push(item);
         updateCartCount();
-        alert(`${item.name} added to cart!`);
+        showToast(`${item.name} added to cart`);
       }
     }
 
@@ -142,9 +158,9 @@
           <div class="flex justify-between items-center border-b pb-4">
             <div>
               <p class="font-medium">${item.name}</p>
-              <p class="text-sm text-gray-500">£${item.price}</p>
+              <p class="text-sm text-gray-500">£${item.price.toFixed(2)}</p>
             </div>
-            <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700">Remove</button>
+            <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700 text-sm font-medium">Remove</button>
           </div>`;
       });
 
@@ -159,8 +175,8 @@
     }
 
     function checkout() {
-      if (cart.length === 0) return alert("Cart is empty");
-      alert("✅ Demo Checkout Successful!\n\nThank you for ordering from Dannyca’s Kitchen.\n\n(Stripe can be added easily later)");
+      if (cart.length === 0) return;
+      alert("✅ Order Received!\n\nThank you for ordering from Dannyca’s Kitchen.\n\n(This is a demo - real payments coming soon)");
     }
 
     // Initialize
