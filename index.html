@@ -7,11 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    .hero-bg { 
-      background-image: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34b4'); 
-      background-size: cover; 
-      background-position: center;
-    }
+    .hero-bg { background-image: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34b4'); background-size: cover; }
     .menu-card { transition: all 0.3s; }
     .menu-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
   </style>
@@ -24,123 +20,85 @@
       <div class="flex items-center gap-4">
         <div class="w-14 h-14 bg-orange-600 rounded-2xl flex items-center justify-center text-white text-4xl font-bold">DK</div>
         <div>
-          <h1 class="text-3xl font-bold tracking-tight">Dannyca’s Kitchen</h1>
-          <p class="text-sm text-gray-500">Filipino • British Fusion • Est. 2025</p>
+          <h1 class="text-3xl font-bold">Dannyca’s Kitchen</h1>
+          <p class="text-sm text-gray-500">Filipino • British Fusion</p>
         </div>
       </div>
-      <div class="flex items-center gap-4">
-        <button onclick="toggleCart()" class="flex items-center gap-2 bg-orange-100 hover:bg-orange-200 text-orange-700 px-5 py-3 rounded-2xl font-medium">
-          <i class="fas fa-shopping-cart"></i> Cart (<span id="cart-count">0</span>)
-        </button>
-        <a href="#admin" class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-2xl font-medium">Admin</a>
-      </div>
+      <button onclick="toggleCart()" class="flex items-center gap-2 bg-orange-100 hover:bg-orange-200 px-6 py-3 rounded-2xl font-medium">
+        <i class="fas fa-shopping-cart"></i> Cart (<span id="cart-count">0</span>)
+      </button>
     </div>
   </header>
 
   <!-- Hero -->
   <section class="hero-bg h-screen flex items-center justify-center text-white text-center px-6">
-    <div class="max-w-3xl">
-      <h2 class="text-5xl md:text-7xl font-bold mb-6">Taste the Fusion</h2>
-      <p class="text-2xl mb-8">Authentic Filipino & British classics • Collection or Delivery (5km radius)</p>
-      <a href="#menu" class="inline-block bg-orange-600 hover:bg-orange-700 text-white text-xl font-semibold px-12 py-5 rounded-3xl">Order Now</a>
+    <div>
+      <h2 class="text-6xl font-bold mb-4">Dannyca’s Kitchen</h2>
+      <p class="text-2xl">Collection or Delivery within 5km</p>
     </div>
   </section>
 
   <!-- Menu -->
   <section id="menu" class="max-w-6xl mx-auto px-6 py-16">
-    <h2 class="text-4xl font-bold text-center mb-4">Our Menu</h2>
-    <p class="text-center text-gray-600 mb-12">Click to add items to your cart</p>
-    
+    <h2 class="text-4xl font-bold text-center mb-12">Our Menu</h2>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="menu-container"></div>
   </section>
 
   <!-- Cart Sidebar -->
-  <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50">
-    <div class="p-6 h-full flex flex-col">
-      <div class="flex justify-between items-center mb-6">
-        <h3 class="text-2xl font-bold">Your Cart</h3>
-        <button onclick="toggleCart()" class="text-3xl text-gray-400 hover:text-gray-600">×</button>
+  <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-auto">
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-8">
+        <h3 class="text-3xl font-bold">Your Cart</h3>
+        <button onclick="toggleCart()" class="text-4xl text-gray-400 hover:text-black">×</button>
       </div>
 
-      <div id="cart-items" class="flex-1 overflow-auto"></div>
+      <div id="cart-items" class="space-y-6 mb-8"></div>
 
       <div class="border-t pt-6">
         <div class="flex justify-between text-lg mb-2">
           <span>Subtotal</span>
           <span id="subtotal">£0.00</span>
         </div>
-        <div class="flex justify-between text-lg mb-4">
-          <span id="delivery-label">Delivery Fee</span>
+        <div class="flex justify-between text-lg">
+          <span id="fee-label">Delivery Fee</span>
           <span id="delivery-fee">£3.99</span>
         </div>
-        <div class="flex justify-between text-2xl font-bold border-t pt-4">
+        <div class="flex justify-between text-2xl font-bold border-t pt-6 mt-6">
           <span>Total</span>
           <span id="total">£0.00</span>
         </div>
-
-        <div class="mt-6">
-          <label class="flex items-center gap-3 mb-4">
-            <input type="radio" name="order-type" checked onchange="updateDeliveryFee()" class="w-5 h-5">
-            <span>Delivery (within 5km)</span>
-          </label>
-          <label class="flex items-center gap-3">
-            <input type="radio" name="order-type" onchange="updateDeliveryFee()" class="w-5 h-5">
-            <span>Collection (no fee)</span>
-          </label>
-        </div>
-
-        <button onclick="checkout()" class="w-full bg-green-600 hover:bg-green-700 text-white py-5 rounded-2xl font-semibold text-lg mt-8">
-          Proceed to Payment →
-        </button>
       </div>
+
+      <button onclick="checkout()" class="w-full mt-10 bg-green-600 hover:bg-green-700 text-white py-5 rounded-2xl text-xl font-semibold">
+        Proceed to Checkout →
+      </button>
     </div>
   </div>
 
-  <!-- Admin Section -->
-  <section id="admin" class="max-w-4xl mx-auto px-6 py-20 bg-gray-100">
-    <h2 class="text-4xl font-bold text-center mb-10">Admin Panel</h2>
-    <div class="max-w-md mx-auto bg-white p-8 rounded-3xl shadow">
-      <input type="password" id="admin-pass" placeholder="Enter admin password" 
-             class="w-full p-4 border rounded-2xl mb-4 text-center text-lg">
-      <button onclick="loginAdmin()" 
-              class="w-full bg-orange-600 hover:bg-orange-700 text-white py-4 rounded-2xl font-semibold">
-        Login to Admin
-      </button>
-      <div id="admin-content" class="hidden mt-8"></div>
-    </div>
-  </section>
-
   <script>
     let cart = [];
-    const ADMIN_PASSWORD = "admin123"; // ← Change this to your discreet password
-
     const menuItems = [
-      {id:1, name:"Chicken Adobo", price:9.50, desc:"Classic Filipino garlic-soy chicken with rice"},
-      {id:2, name:"Sinigang na Baboy", price:10.50, desc:"Sour tamarind pork soup with vegetables"},
-      {id:3, name:"Lechon Kawali", price:12.50, desc:"Crispy deep-fried pork belly"},
-      {id:4, name:"Full English Breakfast", price:11.99, desc:"Sausage, bacon, eggs, beans & toast"},
-      {id:5, name:"Fish & Chips", price:8.99, desc:"Golden battered fish with chips & peas"},
-      {id:6, name:"Halo-Halo", price:6.50, desc:"Filipino shaved ice with mixed toppings"},
-      {id:7, name:"Beef Tapa", price:10.99, desc:"Cured beef with garlic rice & egg"},
-      {id:8, name:"Bangers & Mash", price:9.50, desc:"Sausages with creamy mashed potatoes"},
-      {id:9, name:"Pancit Canton", price:8.99, desc:"Stir-fried noodles with chicken & vegetables"},
+      {id:1, name:"Chicken Adobo", price:9.50, desc:"Classic Filipino garlic-soy chicken"},
+      {id:2, name:"Sinigang na Baboy", price:10.50, desc:"Tamarind pork soup"},
+      {id:3, name:"Lechon Kawali", price:12.50, desc:"Crispy pork belly"},
+      {id:4, name:"Full English Breakfast", price:11.99, desc:"Sausage, bacon, eggs & beans"},
+      {id:5, name:"Fish & Chips", price:8.99, desc:"British classic"},
+      {id:6, name:"Halo-Halo", price:6.50, desc:"Filipino shaved ice dessert"},
+      {id:7, name:"Beef Tapa", price:10.99, desc:"Cured beef with garlic rice"},
+      {id:8, name:"Pancit Canton", price:8.99, desc:"Stir-fried noodles"},
     ];
 
-    // Render Menu
     function renderMenu() {
       const container = document.getElementById('menu-container');
       container.innerHTML = '';
       menuItems.forEach(item => {
         container.innerHTML += `
           <div class="menu-card bg-white rounded-3xl shadow p-6">
-            <h3 class="font-semibold text-xl mb-1">${item.name}</h3>
-            <p class="text-gray-600 text-sm mb-4">${item.desc}</p>
-            <div class="flex justify-between items-center">
-              <span class="text-3xl font-bold text-orange-600">£${item.price.toFixed(2)}</span>
-              <button onclick="addToCart(${item.id})" 
-                      class="bg-orange-600 text-white px-6 py-3 rounded-2xl hover:bg-orange-700 font-medium">
-                Add +
-              </button>
+            <h3 class="font-semibold text-xl">${item.name}</h3>
+            <p class="text-gray-600 text-sm mt-1">${item.desc}</p>
+            <div class="mt-6 flex justify-between items-center">
+              <span class="text-3xl font-bold text-orange-600">£${item.price}</span>
+              <button onclick="addToCart(${item.id})" class="bg-orange-600 text-white px-8 py-3 rounded-2xl hover:bg-orange-700">Add to Cart</button>
             </div>
           </div>`;
       });
@@ -148,46 +106,61 @@
 
     function addToCart(id) {
       const item = menuItems.find(i => i.id === id);
-      cart.push({...item});
-      updateCart();
-      alert(`${item.name} added to cart!`);
+      if (item) {
+        cart.push(item);
+        updateCartCount();
+        alert(`${item.name} added to cart!`);
+      }
     }
 
-    function updateCart() {
+    function updateCartCount() {
       document.getElementById('cart-count').textContent = cart.length;
     }
 
     function toggleCart() {
       const sidebar = document.getElementById('cart-sidebar');
       sidebar.classList.toggle('translate-x-full');
-      renderCartItems();
+      if (!sidebar.classList.contains('translate-x-full')) {
+        renderCart();
+      }
     }
 
-    function renderCartItems() {
-      // (Full cart rendering code - I'll expand this in next update if needed)
-      console.log("Cart opened with", cart.length, "items");
+    function renderCart() {
+      const container = document.getElementById('cart-items');
+      container.innerHTML = '';
+
+      if (cart.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-12">Your cart is empty</p>';
+        return;
+      }
+
+      let subtotal = 0;
+
+      cart.forEach((item, index) => {
+        subtotal += item.price;
+        container.innerHTML += `
+          <div class="flex justify-between items-center border-b pb-4">
+            <div>
+              <p class="font-medium">${item.name}</p>
+              <p class="text-sm text-gray-500">£${item.price}</p>
+            </div>
+            <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700">Remove</button>
+          </div>`;
+      });
+
+      document.getElementById('subtotal').textContent = '£' + subtotal.toFixed(2);
+      document.getElementById('total').textContent = '£' + (subtotal + 3.99).toFixed(2);
     }
 
-    function updateDeliveryFee() {
-      console.log("Delivery type changed");
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      renderCart();
+      updateCartCount();
     }
 
     function checkout() {
       if (cart.length === 0) return alert("Cart is empty");
-      alert("Thank you! This is a demo checkout.\n\nStripe integration can be added easily.");
-    }
-
-    function loginAdmin() {
-      const pass = document.getElementById('admin-pass').value;
-      if (pass === ADMIN_PASSWORD) {
-        document.getElementById('admin-content').classList.remove('hidden');
-        document.getElementById('admin-content').innerHTML = `
-          <p class="text-green-600 font-medium mb-6">✅ Logged in successfully</p>
-          <p class="text-center text-gray-600">Full admin panel (add/edit items) coming in next sprint.</p>
-        `;
-      } else {
-        alert("Incorrect password");
-      }
+      alert("✅ Demo Checkout Successful!\n\nThank you for ordering from Dannyca’s Kitchen.\n\n(Stripe can be added easily later)");
     }
 
     // Initialize
