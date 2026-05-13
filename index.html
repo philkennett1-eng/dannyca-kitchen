@@ -82,7 +82,7 @@
   </div>
 
   <!-- Toast -->
-  <div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-2xl shadow-xl flex items-center gap-3 toast">
+  <div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-2xl shadow-xl flex items-center gap-3">
     <i class="fas fa-check-circle text-green-400"></i>
     <span id="toast-text"></span>
   </div>
@@ -188,11 +188,13 @@
       alert("✅ Order Received!\n\nThank you for ordering from Dannyca’s Kitchen.");
     }
 
-    // Close with Escape key
-    document.addEventListener('keydown', (e) => {
+    // Improved Escape key support
+    document.addEventListener('keydown', function(e) {
       if (e.key === "Escape") {
         const sidebar = document.getElementById('cart-sidebar');
-        if (!sidebar.classList.contains('translate-x-full')) toggleCart();
+        if (!sidebar.classList.contains('translate-x-full')) {
+          toggleCart();
+        }
       }
     });
 
