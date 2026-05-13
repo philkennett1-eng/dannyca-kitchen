@@ -10,8 +10,6 @@
     .hero-bg { background-image: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34b4'); background-size: cover; }
     .menu-card { transition: all 0.3s; }
     .menu-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
-    .toast { animation: slideUp 0.3s ease forwards; }
-    @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   </style>
 </head>
 <body class="bg-gray-50">
@@ -77,12 +75,6 @@
     </div>
   </div>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-2xl shadow-xl flex items-center gap-3 toast">
-    <i class="fas fa-check-circle text-green-400"></i>
-    <span id="toast-text"></span>
-  </div>
-
   <script>
     let cart = [];
 
@@ -113,19 +105,11 @@
       });
     }
 
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      document.getElementById('toast-text').textContent = message;
-      toast.classList.remove('hidden');
-      setTimeout(() => toast.classList.add('hidden'), 2000);
-    }
-
     function addToCart(id) {
       const item = menuItems.find(i => i.id === id);
       if (item) {
         cart.push(item);
         updateCartCount();
-        showToast(`${item.name} added to cart`);
       }
     }
 
@@ -176,7 +160,7 @@
 
     function checkout() {
       if (cart.length === 0) return;
-      alert("✅ Order Received!\n\nThank you for ordering from Dannyca’s Kitchen.\n\n(This is a demo - real payments coming soon)");
+      alert("✅ Order Received!\n\nThank you for your order from Dannyca’s Kitchen.\n\n(This is a demo version)");
     }
 
     // Initialize
