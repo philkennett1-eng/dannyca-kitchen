@@ -42,7 +42,8 @@
       <p class="text-2xl">Filipino-British Fusion • Fresh Daily</p>
     </div>
   </section>
-    <!-- Menu -->
+
+  <!-- Menu -->
   <section id="menu" class="max-w-6xl mx-auto px-6 py-16">
     <h2 class="text-5xl font-bold text-center mb-16">Our Menu</h2>
 
@@ -78,9 +79,10 @@
       </div>
     </div>
   </section>
-    <!-- Delivery Map -->
+
+  <!-- Delivery Map -->
   <section class="max-w-6xl mx-auto px-6 py-20 bg-white">
-    <h2 class="text-4xl font-bold text-center mb-10">Delivery Area Management</h2>
+    <h2 class="text-4xl font-bold text-center mb-10">Delivery Area</h2>
     <div class="grid md:grid-cols-2 gap-10">
       <div>
         <input id="supplier-address" value="123 High Street, London, UK" class="w-full p-4 border rounded-2xl mb-4">
@@ -132,7 +134,7 @@
       {id:5, name:"Lechon Kawali", price:12.50, desc:"Crispy pork belly", category:"Main Meals"},
       {id:6, name:"Beef Tapa", price:11.99, desc:"Cured beef with garlic rice", category:"Main Meals"},
       {id:7, name:"Halo-Halo", price:6.99, desc:"Mixed shaved ice dessert", category:"Desserts"},
-      {id:8, name:"Leche Flan", price:5.50, desc:"Rich caramel custard", category:"Desserts"},
+      {id:8, name:"Leche Flan", price:5.50, desc:"Caramel custard", category:"Desserts"},
       {id:9, name:"Calamansi Juice", price:3.50, desc:"Fresh Philippine lime drink", category:"Drinks"},
       {id:10, name:"Iced Mango Shake", price:4.99, desc:"Sweet mango shake", category:"Drinks"},
       {id:11, name:"Garlic Rice", price:3.00, desc:"Fragrant garlic rice", category:"Snacks"},
@@ -173,11 +175,11 @@
       }
     }
 
-    function showToast(msg) {
+    function showToast(message) {
       const toast = document.getElementById('toast');
-      document.getElementById('toast-text').textContent = msg;
+      document.getElementById('toast-text').textContent = message;
       toast.classList.remove('hidden');
-      setTimeout(() => toast.classList.add('hidden'), 1800);
+      setTimeout(() => toast.classList.add('hidden'), 2000);
     }
 
     function updateCartCount() {
@@ -189,6 +191,34 @@
       const overlay = document.getElementById('cart-overlay');
       sidebar.classList.toggle('translate-x-full');
       overlay.classList.toggle('hidden');
+      if (!sidebar.classList.contains('translate-x-full')) renderCart();
+    }
+
+    function renderCart() {
+      const container = document.getElementById('cart-items');
+      container.innerHTML = '';
+      let subtotal = 0;
+
+      cart.forEach((item, index) => {
+        subtotal += item.price * (item.quantity || 1);
+        container.innerHTML += `
+          <div class="flex justify-between items-center border-b pb-4">
+            <div>
+              <p class="font-medium">${item.name}</p>
+              <p class="text-sm text-gray-500">${formatPrice(item.price)}</p>
+            </div>
+            <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700">Remove</button>
+          </div>`;
+      });
+
+      document.getElementById('subtotal').textContent = formatPrice(subtotal);
+      document.getElementById('total').textContent = formatPrice(subtotal + 3.99);
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      renderCart();
+      updateCartCount();
     }
 
     function checkout() {
@@ -206,26 +236,11 @@
     }
 
     function addNewItem() {
-      alert("Item added (demo - will connect to database soon)");
+      alert("New item added (demo - database coming soon)");
     }
 
-    // Map functions (simplified)
-    let map;
-    function initMap() {
-      map = L.map('map').setView([51.5074, -0.1278], 13);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-      L.circle([51.5074, -0.1278], {color: '#f97316', fillOpacity: 0.15, radius: 5000}).addTo(map);
-    }
-
-    function updateDeliveryArea() {
-      alert("Delivery area updated (demo)");
-    }
-
-    // Initialize everything
-    window.onload = () => {
-      renderAllMenus();
-      initMap();
-    };
+    // Initialize
+    renderAllMenus();
   </script>
 </body>
 </html>
