@@ -11,7 +11,7 @@
   <style>
     .hero-bg { background-image: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34b4'); background-size: cover; }
     .menu-card { transition: all 0.3s ease; }
-    .menu-card:hover { transform: translateY(-12px); box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.15); }
+    .menu-card:hover { transform: translateY(-10px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
     .toast { animation: slideUp 0.4s ease forwards; }
     @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     #map { height: 480px; border-radius: 16px; }
@@ -39,31 +39,25 @@
   <section class="hero-bg h-screen flex items-center justify-center text-white text-center px-6">
     <div>
       <h2 class="text-6xl font-bold mb-4">Dannyca’s Kitchen</h2>
-      <p class="text-2xl">Authentic Filipino-British Fusion</p>
+      <p class="text-2xl">Filipino-British Fusion • Fresh Daily</p>
     </div>
   </section>
-
-  <!-- Menu -->
+    <!-- Menu -->
   <section id="menu" class="max-w-6xl mx-auto px-6 py-16">
     <h2 class="text-5xl font-bold text-center mb-16">Our Menu</h2>
 
-    <!-- Starters -->
     <h3 class="text-3xl font-bold mb-8 border-b pb-4">Starters</h3>
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20" id="starters"></div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16" id="starters"></div>
 
-    <!-- Main Meals -->
     <h3 class="text-3xl font-bold mb-8 border-b pb-4">Main Meals</h3>
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20" id="mains"></div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16" id="mains"></div>
 
-    <!-- Desserts -->
     <h3 class="text-3xl font-bold mb-8 border-b pb-4">Desserts</h3>
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20" id="desserts"></div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16" id="desserts"></div>
 
-    <!-- Drinks -->
     <h3 class="text-3xl font-bold mb-8 border-b pb-4">Drinks</h3>
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20" id="drinks"></div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16" id="drinks"></div>
 
-    <!-- Snacks & Sides -->
     <h3 class="text-3xl font-bold mb-8 border-b pb-4">Snacks & Sides</h3>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="snacks"></div>
   </section>
@@ -80,20 +74,31 @@
         <input id="new-name" placeholder="Item Name" class="w-full p-3 border rounded-xl mb-3">
         <input id="new-price" type="number" step="0.01" placeholder="Price (£)" class="w-full p-3 border rounded-xl mb-3">
         <textarea id="new-desc" placeholder="Description" class="w-full p-3 border rounded-xl mb-4" rows="2"></textarea>
-        <select id="new-category" class="w-full p-3 border rounded-xl mb-4">
-          <option value="Starters">Starters</option>
-          <option value="Main Meals">Main Meals</option>
-          <option value="Desserts">Desserts</option>
-          <option value="Drinks">Drinks</option>
-          <option value="Snacks">Snacks & Sides</option>
-        </select>
         <button onclick="addNewItem()" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-semibold">Add Item</button>
       </div>
     </div>
   </section>
+    <!-- Delivery Map -->
+  <section class="max-w-6xl mx-auto px-6 py-20 bg-white">
+    <h2 class="text-4xl font-bold text-center mb-10">Delivery Area Management</h2>
+    <div class="grid md:grid-cols-2 gap-10">
+      <div>
+        <input id="supplier-address" value="123 High Street, London, UK" class="w-full p-4 border rounded-2xl mb-4">
+        <div class="flex gap-4">
+          <input id="radius-value" type="number" value="5" class="w-28 p-4 border rounded-2xl">
+          <select id="radius-unit" class="p-4 border rounded-2xl">
+            <option value="km">km</option>
+            <option value="miles">miles</option>
+          </select>
+        </div>
+        <button onclick="updateDeliveryArea()" class="mt-6 w-full bg-orange-600 text-white py-4 rounded-2xl font-semibold">Update Delivery Area</button>
+      </div>
+      <div id="map" class="border rounded-3xl"></div>
+    </div>
+  </section>
 
-  <!-- Cart Sidebar -->
-  <div id="cart-overlay" class="hidden fixed inset-0 bg-black/50 z-40" onclick="toggleCart()"></div>
+  <!-- Cart -->
+  <div id="cart-overlay" class="hidden fixed inset-0 bg-black/50 z-50" onclick="toggleCart()"></div>
   <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-auto">
     <div class="p-6">
       <div class="flex justify-between items-center mb-8">
@@ -118,7 +123,8 @@
 
   <script>
     let cart = [];
-    let menuItems = [
+
+    const menuItems = [
       {id:1, name:"Lumpia Rolls", price:6.50, desc:"Crispy Filipino spring rolls", category:"Starters"},
       {id:2, name:"Calamares", price:8.50, desc:"Crispy fried squid", category:"Starters"},
       {id:3, name:"Chicken Adobo", price:9.50, desc:"Classic garlic-soy chicken", category:"Main Meals"},
@@ -126,7 +132,7 @@
       {id:5, name:"Lechon Kawali", price:12.50, desc:"Crispy pork belly", category:"Main Meals"},
       {id:6, name:"Beef Tapa", price:11.99, desc:"Cured beef with garlic rice", category:"Main Meals"},
       {id:7, name:"Halo-Halo", price:6.99, desc:"Mixed shaved ice dessert", category:"Desserts"},
-      {id:8, name:"Leche Flan", price:5.50, desc:"Caramel custard", category:"Desserts"},
+      {id:8, name:"Leche Flan", price:5.50, desc:"Rich caramel custard", category:"Desserts"},
       {id:9, name:"Calamansi Juice", price:3.50, desc:"Fresh Philippine lime drink", category:"Drinks"},
       {id:10, name:"Iced Mango Shake", price:4.99, desc:"Sweet mango shake", category:"Drinks"},
       {id:11, name:"Garlic Rice", price:3.00, desc:"Fragrant garlic rice", category:"Snacks"},
@@ -137,20 +143,17 @@
 
     function formatPrice(p) { return "£" + p.toFixed(2); }
 
-    function renderCategory(containerId, items) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
-      items.forEach(item => {
-        container.innerHTML += `
-          <div class="menu-card bg-white rounded-3xl shadow p-6">
-            <h3 class="font-semibold text-xl">${item.name}</h3>
-            <p class="text-gray-600 text-sm mt-1">${item.desc}</p>
-            <div class="mt-6 flex justify-between items-center">
-              <span class="text-3xl font-bold text-orange-600">${formatPrice(item.price)}</span>
-              <button onclick="addToCart(${item.id})" class="bg-orange-600 text-white px-8 py-3 rounded-2xl hover:bg-orange-700">Add to Cart</button>
-            </div>
-          </div>`;
-      });
+    function renderCategory(id, items) {
+      const container = document.getElementById(id);
+      container.innerHTML = items.map(item => `
+        <div class="menu-card bg-white rounded-3xl shadow p-6">
+          <h3 class="font-semibold text-xl">${item.name}</h3>
+          <p class="text-gray-600 text-sm mt-1">${item.desc}</p>
+          <div class="mt-6 flex justify-between items-center">
+            <span class="text-3xl font-bold text-orange-600">${formatPrice(item.price)}</span>
+            <button onclick="addToCart(${item.id})" class="bg-orange-600 text-white px-8 py-3 rounded-2xl hover:bg-orange-700">Add to Cart</button>
+          </div>
+        </div>`).join('');
     }
 
     function renderAllMenus() {
@@ -170,9 +173,9 @@
       }
     }
 
-    function showToast(message) {
+    function showToast(msg) {
       const toast = document.getElementById('toast');
-      document.getElementById('toast-text').textContent = message;
+      document.getElementById('toast-text').textContent = msg;
       toast.classList.remove('hidden');
       setTimeout(() => toast.classList.add('hidden'), 1800);
     }
@@ -184,26 +187,13 @@
     function toggleCart() {
       const sidebar = document.getElementById('cart-sidebar');
       const overlay = document.getElementById('cart-overlay');
-      if (sidebar.classList.contains('translate-x-full')) {
-        sidebar.classList.remove('translate-x-full');
-        overlay.classList.remove('hidden');
-        renderCart();
-      } else {
-        sidebar.classList.add('translate-x-full');
-        overlay.classList.add('hidden');
-      }
-    }
-
-    function renderCart() { /* Full cart render with quantity - abbreviated for space */ 
-      console.log("Cart opened with", cart.length, "items");
+      sidebar.classList.toggle('translate-x-full');
+      overlay.classList.toggle('hidden');
     }
 
     function checkout() {
       if (cart.length === 0) return;
       alert("✅ Order Received!\n\nThank you for ordering from Dannyca’s Kitchen.");
-      cart = [];
-      updateCartCount();
-      toggleCart();
     }
 
     function loginAdmin() {
@@ -216,11 +206,26 @@
     }
 
     function addNewItem() {
-      alert("New item added (demo - will connect to database soon)");
+      alert("Item added (demo - will connect to database soon)");
     }
 
-    // Initialize
-    renderAllMenus();
+    // Map functions (simplified)
+    let map;
+    function initMap() {
+      map = L.map('map').setView([51.5074, -0.1278], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+      L.circle([51.5074, -0.1278], {color: '#f97316', fillOpacity: 0.15, radius: 5000}).addTo(map);
+    }
+
+    function updateDeliveryArea() {
+      alert("Delivery area updated (demo)");
+    }
+
+    // Initialize everything
+    window.onload = () => {
+      renderAllMenus();
+      initMap();
+    };
   </script>
 </body>
 </html>
