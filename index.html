@@ -6,12 +6,12 @@
   <title>Dannyca’s Kitchen | Order Online</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
     .hero-bg { background-image: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34b4'); background-size: cover; }
     .menu-card { transition: all 0.3s ease; }
     .menu-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+    .toast { animation: slideUp 0.4s ease forwards; }
+    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   </style>
 </head>
 <body class="bg-gray-50">
@@ -64,35 +64,16 @@
   <section id="admin" class="max-w-6xl mx-auto px-6 py-20 bg-gray-100">
     <h2 class="text-4xl font-bold text-center mb-10">Admin Panel</h2>
     <div class="max-w-lg mx-auto bg-white p-8 rounded-3xl shadow">
-      <input type="password" id="admin-pass" placeholder="Enter admin password" class="w-full p-4 border rounded-2xl mb-6 text-center">
+      <input type="password" id="admin-pass" placeholder="Enter admin password" class="w-full p-4 border rounded-2xl mb-6 text-center text-lg">
       <button onclick="loginAdmin()" class="w-full bg-orange-600 hover:bg-orange-700 text-white py-4 rounded-2xl font-semibold">Login</button>
 
       <div id="admin-content" class="hidden mt-8">
-        <h3 class="font-semibold mb-4">Add New Menu Item</h3>
+        <h3 class="font-semibold mb-4">Add New Item</h3>
         <input id="new-name" placeholder="Item Name" class="w-full p-3 border rounded-xl mb-3">
         <input id="new-price" type="number" step="0.01" placeholder="Price (£)" class="w-full p-3 border rounded-xl mb-3">
         <textarea id="new-desc" placeholder="Description" class="w-full p-3 border rounded-xl mb-4" rows="2"></textarea>
         <button onclick="addNewItem()" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-semibold">Add Item</button>
       </div>
-    </div>
-  </section>
-
-  <!-- Delivery Map -->
-  <section class="max-w-6xl mx-auto px-6 py-20 bg-white">
-    <h2 class="text-4xl font-bold text-center mb-10">Delivery Area</h2>
-    <div class="grid md:grid-cols-2 gap-10">
-      <div>
-        <input id="supplier-address" value="123 High Street, London, UK" class="w-full p-4 border rounded-2xl mb-4">
-        <div class="flex gap-4">
-          <input id="radius-value" type="number" value="5" class="w-28 p-4 border rounded-2xl">
-          <select id="radius-unit" class="p-4 border rounded-2xl">
-            <option value="km">km</option>
-            <option value="miles">miles</option>
-          </select>
-        </div>
-        <button onclick="updateDeliveryArea()" class="mt-6 w-full bg-orange-600 text-white py-4 rounded-2xl font-semibold">Update Delivery Area</button>
-      </div>
-      <div id="map" class="border rounded-3xl"></div>
     </div>
   </section>
 
@@ -200,12 +181,24 @@
               <p class="font-medium">${item.name}</p>
               <p class="text-sm text-gray-500">${formatPrice(item.price)}</p>
             </div>
-            <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700">Remove</button>
+            <div class="flex items-center gap-3">
+              <button onclick="changeQuantity(${index}, -1)" class="w-8 h-8 border rounded hover:bg-gray-100">-</button>
+              <span class="w-8 text-center">${item.quantity || 1}</span>
+              <button onclick="changeQuantity(${index}, 1)" class="w-8 h-8 border rounded hover:bg-gray-100">+</button>
+              <button onclick="removeFromCart(${index})" class="ml-4 text-red-500 hover:text-red-700">Remove</button>
+            </div>
           </div>`;
       });
 
       document.getElementById('subtotal').textContent = formatPrice(subtotal);
       document.getElementById('total').textContent = formatPrice(subtotal + 3.99);
+    }
+
+    function changeQuantity(index, change) {
+      cart[index].quantity = (cart[index].quantity || 1) + change;
+      if (cart[index].quantity < 1) cart[index].quantity = 1;
+      renderCart();
+      updateCartCount();
     }
 
     function removeFromCart(index) {
@@ -217,6 +210,9 @@
     function checkout() {
       if (cart.length === 0) return;
       alert("✅ Order Received!\n\nThank you for ordering from Dannyca’s Kitchen.");
+      cart = [];
+      updateCartCount();
+      toggleCart();
     }
 
     function loginAdmin() {
@@ -229,24 +225,11 @@
     }
 
     function addNewItem() {
-      alert("New item added (demo - database coming soon)");
-    }
-
-    // Map
-    let map;
-    function initMap() {
-      map = L.map('map').setView([51.5074, -0.1278], 13);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-      L.circle([51.5074, -0.1278], {color: '#f97316', fillOpacity: 0.15, radius: 5000}).addTo(map);
-    }
-
-    function updateDeliveryArea() {
-      alert("Delivery area updated (demo)");
+      alert("New item added (database connection coming soon)");
     }
 
     // Initialize
     renderAllMenus();
-    initMap();
   </script>
 </body>
 </html>
