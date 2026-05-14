@@ -12,9 +12,6 @@
     .hero-bg { background-image: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34b4'); background-size: cover; }
     .menu-card { transition: all 0.3s ease; }
     .menu-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
-    .toast { animation: slideUp 0.4s ease forwards; }
-    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    #map { height: 480px; border-radius: 16px; }
   </style>
 </head>
 <body class="bg-gray-50">
@@ -63,6 +60,23 @@
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="snacks"></div>
   </section>
 
+  <!-- Admin Panel -->
+  <section id="admin" class="max-w-6xl mx-auto px-6 py-20 bg-gray-100">
+    <h2 class="text-4xl font-bold text-center mb-10">Admin Panel</h2>
+    <div class="max-w-lg mx-auto bg-white p-8 rounded-3xl shadow">
+      <input type="password" id="admin-pass" placeholder="Enter admin password" class="w-full p-4 border rounded-2xl mb-6 text-center">
+      <button onclick="loginAdmin()" class="w-full bg-orange-600 hover:bg-orange-700 text-white py-4 rounded-2xl font-semibold">Login</button>
+
+      <div id="admin-content" class="hidden mt-8">
+        <h3 class="font-semibold mb-4">Add New Menu Item</h3>
+        <input id="new-name" placeholder="Item Name" class="w-full p-3 border rounded-xl mb-3">
+        <input id="new-price" type="number" step="0.01" placeholder="Price (£)" class="w-full p-3 border rounded-xl mb-3">
+        <textarea id="new-desc" placeholder="Description" class="w-full p-3 border rounded-xl mb-4" rows="2"></textarea>
+        <button onclick="addNewItem()" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-semibold">Add Item</button>
+      </div>
+    </div>
+  </section>
+
   <!-- Delivery Map -->
   <section class="max-w-6xl mx-auto px-6 py-20 bg-white">
     <h2 class="text-4xl font-bold text-center mb-10">Delivery Area</h2>
@@ -79,23 +93,6 @@
         <button onclick="updateDeliveryArea()" class="mt-6 w-full bg-orange-600 text-white py-4 rounded-2xl font-semibold">Update Delivery Area</button>
       </div>
       <div id="map" class="border rounded-3xl"></div>
-    </div>
-  </section>
-
-  <!-- Admin Panel -->
-  <section id="admin" class="max-w-6xl mx-auto px-6 py-20 bg-gray-100">
-    <h2 class="text-4xl font-bold text-center mb-10">Admin Panel</h2>
-    <div class="max-w-lg mx-auto bg-white p-8 rounded-3xl shadow">
-      <input type="password" id="admin-pass" placeholder="Enter admin password" class="w-full p-4 border rounded-2xl mb-6 text-center text-lg">
-      <button onclick="loginAdmin()" class="w-full bg-orange-600 hover:bg-orange-700 text-white py-4 rounded-2xl font-semibold">Login to Admin</button>
-
-      <div id="admin-content" class="hidden mt-8">
-        <h3 class="font-semibold mb-4">Add New Menu Item</h3>
-        <input id="new-name" placeholder="Item Name" class="w-full p-3 border rounded-xl mb-3">
-        <input id="new-price" type="number" step="0.01" placeholder="Price (£)" class="w-full p-3 border rounded-xl mb-3">
-        <textarea id="new-desc" placeholder="Description" class="w-full p-3 border rounded-xl mb-4" rows="2"></textarea>
-        <button onclick="addNewItem()" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-semibold">Add Item</button>
-      </div>
     </div>
   </section>
 
