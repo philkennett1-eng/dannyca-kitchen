@@ -10,32 +10,43 @@
     .menu-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
   </style>
 </head>
-<body class="bg-gray-50 p-8">
+<body class="bg-gray-50">
 
-  <h1 class="text-4xl font-bold mb-8">Dannyca’s Kitchen</h1>
+  <!-- Header -->
+  <header class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 bg-orange-600 rounded-2xl flex items-center justify-center text-white text-4xl font-bold">DK</div>
+        <div>
+          <h1 class="text-3xl font-bold">Dannyca’s Kitchen</h1>
+          <p class="text-sm text-gray-500">Filipino • British Fusion</p>
+        </div>
+      </div>
+      <button onclick="toggleCart()" class="flex items-center gap-3 bg-orange-100 hover:bg-orange-200 px-6 py-4 rounded-2xl font-medium">
+        <i class="fas fa-shopping-cart"></i> 
+        Cart (<span id="cart-count">0</span>)
+      </button>
+    </div>
+  </header>
 
   <!-- Menu -->
-  <div id="menu-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-
-  <!-- Cart Button -->
-  <button onclick="toggleCart()" 
-          class="fixed bottom-6 right-6 bg-orange-600 text-white px-6 py-4 rounded-2xl shadow-lg flex items-center gap-3 text-lg font-medium">
-    <i class="fas fa-shopping-cart"></i> 
-    Cart (<span id="cart-count">0</span>)
-  </button>
+  <section class="max-w-6xl mx-auto px-6 py-16">
+    <h2 class="text-5xl font-bold text-center mb-12">Our Menu</h2>
+    <div id="menu-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+  </section>
 
   <!-- Cart Panel -->
   <div id="cart-panel" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
     <div class="bg-white w-full max-w-md mx-4 rounded-3xl p-6 max-h-[85vh] overflow-auto">
       <div class="flex justify-between items-center mb-6">
         <h3 class="text-2xl font-bold">Your Cart</h3>
-        <button onclick="toggleCart()" class="text-3xl text-gray-400 hover:text-black">×</button>
+        <button onclick="toggleCart()" class="text-4xl text-gray-400 hover:text-black">×</button>
       </div>
       
       <div id="cart-content" class="space-y-6"></div>
 
       <div class="border-t pt-6 mt-6">
-        <div class="flex justify-between text-lg font-medium">
+        <div class="flex justify-between text-xl font-bold">
           <span>Total</span>
           <span id="cart-total">£0.00</span>
         </div>
@@ -44,7 +55,7 @@
       <button onclick="checkout()" class="w-full mt-8 bg-green-600 text-white py-4 rounded-2xl text-lg font-semibold">
         Proceed to Checkout
       </button>
-      <button onclick="toggleCart()" class="w-full mt-3 text-gray-500">Close Cart</button>
+      <button onclick="toggleCart()" class="w-full mt-3 text-gray-500">Close</button>
     </div>
   </div>
 
@@ -52,10 +63,10 @@
     let cart = [];
 
     const menuItems = [
-      {id:1, name:"Chicken Adobo", price:9.50, desc:"Classic Filipino dish"},
+      {id:1, name:"Chicken Adobo", price:9.50, desc:"Classic Filipino garlic-soy chicken"},
       {id:2, name:"Sinigang na Baboy", price:10.50, desc:"Tamarind pork soup"},
       {id:3, name:"Lechon Kawali", price:12.50, desc:"Crispy pork belly"},
-      {id:4, name:"Halo-Halo", price:6.99, desc:"Shaved ice dessert"},
+      {id:4, name:"Halo-Halo", price:6.99, desc:"Mixed shaved ice dessert"},
       {id:5, name:"Lumpia Rolls", price:6.50, desc:"Crispy spring rolls"}
     ];
 
@@ -83,7 +94,6 @@
           cart.push({...item, quantity: 1});
         }
         updateCartCount();
-        // Optional: showToast(`${item.name} added`);
       }
     }
 
@@ -109,17 +119,17 @@
       let total = 0;
 
       content.innerHTML = cart.map((item, index) => {
-        const itemTotal = item.price * item.quantity;
+        const itemTotal = item.price * (item.quantity || 1);
         total += itemTotal;
         return `
           <div class="flex justify-between items-center border-b pb-4">
-            <div>
+            <div class="flex-1">
               <p class="font-medium">${item.name}</p>
               <p class="text-sm text-gray-500">£${item.price.toFixed(2)}</p>
             </div>
             <div class="flex items-center gap-3">
               <button onclick="changeQuantity(${index}, -1)" class="w-8 h-8 border rounded hover:bg-gray-100">-</button>
-              <span class="w-8 text-center font-medium">${item.quantity}</span>
+              <span class="w-8 text-center font-medium">${item.quantity || 1}</span>
               <button onclick="changeQuantity(${index}, 1)" class="w-8 h-8 border rounded hover:bg-gray-100">+</button>
               <button onclick="removeFromCart(${index})" class="ml-4 text-red-500 hover:text-red-700">Remove</button>
             </div>
@@ -132,14 +142,12 @@
     function toggleCart() {
       const panel = document.getElementById('cart-panel');
       panel.classList.toggle('hidden');
-      if (!panel.classList.contains('hidden')) {
-        renderCart();
-      }
+      if (!panel.classList.contains('hidden')) renderCart();
     }
 
     function checkout() {
       if (cart.length === 0) return;
-      alert("✅ Order placed successfully! (Demo mode)");
+      alert("✅ Order placed successfully! (Demo)");
       cart = [];
       updateCartCount();
       toggleCart();
