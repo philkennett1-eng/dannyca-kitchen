@@ -3,12 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dannyca’s Kitchen</title>
+  <title>Dannyca’s Kitchen | Order Online</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .menu-card { transition: all 0.3s; }
-    .menu-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
-  </style>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body class="bg-gray-50">
 
@@ -59,6 +57,12 @@
     </div>
   </div>
 
+  <!-- Toast -->
+  <div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-orange-800 text-white px-6 py-4 rounded-2xl shadow-xl flex items-center gap-3 z-50">
+    <i class="fas fa-check-circle"></i>
+    <span id="toast-text"></span>
+  </div>
+
   <script>
     let cart = [];
 
@@ -69,6 +73,13 @@
       {id:4, name:"Halo-Halo", price:6.99, desc:"Mixed shaved ice dessert"},
       {id:5, name:"Lumpia Rolls", price:6.50, desc:"Crispy spring rolls"}
     ];
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-text').textContent = message;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 2500);
+    }
 
     function renderMenu() {
       const container = document.getElementById('menu-container');
@@ -94,6 +105,7 @@
           cart.push({...item, quantity: 1});
         }
         updateCartCount();
+        showToast(`${item.name} added to cart`);
       }
     }
 
@@ -147,7 +159,7 @@
 
     function checkout() {
       if (cart.length === 0) return;
-      alert("✅ Order placed successfully! (Demo)");
+      alert("✅ Order placed successfully! (Demo mode)");
       cart = [];
       updateCartCount();
       toggleCart();
