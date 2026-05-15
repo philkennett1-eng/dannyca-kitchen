@@ -1,4 +1,4 @@
-// script.js - Clean Version
+// script.js - Clean Single Declaration Version
 
 console.log("Script loaded successfully");
 
@@ -13,7 +13,7 @@ let menuItems = [];
 // Load menu from database
 async function loadMenu() {
   console.log("Trying to load menu from Supabase...");
-  
+
   const { data, error } = await supabase
     .from('products')
     .select('*')
@@ -22,7 +22,7 @@ async function loadMenu() {
   if (error) {
     console.error("Database error:", error);
     const container = document.getElementById('menu-container');
-    if (container) container.innerHTML = `<p class="text-red-500 p-8">Error: ${error.message}</p>`;
+    if (container) container.innerHTML = `<p class="text-red-500 p-8">Error loading menu: ${error.message}</p>`;
     return;
   }
 
