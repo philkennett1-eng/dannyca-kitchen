@@ -1,69 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dannyca’s Kitchen | Order Online</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-</head>
-<body class="bg-gray-50">
-
-  <!-- Header -->
-  <header class="bg-white shadow-md sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
-      <div class="flex items-center gap-4">
-        <div class="w-14 h-14 bg-orange-600 rounded-2xl flex items-center justify-center text-white text-4xl font-bold">DK</div>
-        <div>
-          <h1 class="text-3xl font-bold">Dannyca’s Kitchen</h1>
-          <p class="text-sm text-gray-500">Filipino • British Fusion</p>
-        </div>
-      </div>
-      <button onclick="toggleCart()" class="flex items-center gap-3 bg-orange-100 hover:bg-orange-200 px-6 py-4 rounded-2xl font-medium">
-        <i class="fas fa-shopping-cart"></i> 
-        Cart (<span id="cart-count">0</span>)
-      </button>
-    </div>
-  </header>
-
-  <!-- Menu -->
-  <section class="max-w-6xl mx-auto px-6 py-16">
-    <h2 class="text-5xl font-bold text-center mb-12">Our Menu</h2>
-    <div id="menu-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-  </section>
-
-  <!-- Cart Panel -->
-  <div id="cart-panel" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-    <div class="bg-white w-full max-w-md mx-4 rounded-3xl p-6 max-h-[85vh] overflow-auto">
-      <div class="flex justify-between items-center mb-6">
-        <h3 class="text-2xl font-bold">Your Cart</h3>
-        <button onclick="toggleCart()" class="text-4xl text-gray-400 hover:text-black">×</button>
-      </div>
-      
-      <div id="cart-content" class="space-y-6"></div>
-
-      <div class="border-t pt-6 mt-6">
-        <div class="flex justify-between text-xl font-bold">
-          <span>Total</span>
-          <span id="cart-total">£0.00</span>
-        </div>
-      </div>
-
-      <button onclick="checkout()" class="w-full mt-8 bg-green-600 text-white py-4 rounded-2xl text-lg font-semibold">
-        Proceed to Checkout
-      </button>
-      <button onclick="toggleCart()" class="w-full mt-3 text-gray-500">Close</button>
-    </div>
-  </div>
-
-  <!-- Toast -->
-  <div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-orange-800 text-white px-6 py-4 rounded-2xl shadow-xl flex items-center gap-3 z-50">
-    <i class="fas fa-check-circle"></i>
-    <span id="toast-text"></span>
-  </div>
-
-  <script>
+<script>
   let cart = [];
 
   const menuItems = [
@@ -100,7 +35,6 @@
     }
 
     updateCartCount();
-    // showToast(`${item.name} added`);   // Uncomment if you want toast
   }
 
   function changeQuantity(index, delta) {
@@ -118,9 +52,14 @@
     updateCartCount();
   }
 
+  // FIXED: Now shows TOTAL quantity, not just number of lines
   function updateCartCount() {
+    let totalItems = 0;
+    cart.forEach(item => {
+      totalItems += (item.quantity || 1);
+    });
     const countEl = document.getElementById('cart-count');
-    if (countEl) countEl.textContent = cart.length;
+    if (countEl) countEl.textContent = totalItems;
   }
 
   function renderCart() {
@@ -153,9 +92,7 @@
   function toggleCart() {
     const panel = document.getElementById('cart-panel');
     panel.classList.toggle('hidden');
-    if (!panel.classList.contains('hidden')) {
-      renderCart();
-    }
+    if (!panel.classList.contains('hidden')) renderCart();
   }
 
   function checkout() {
@@ -169,5 +106,3 @@
   // Initialize
   renderMenu();
 </script>
-</body>
-</html>
