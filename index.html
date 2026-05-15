@@ -6,6 +6,7 @@
   <title>Dannyca’s Kitchen</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Supabase - loaded once -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     .menu-card { transition: all 0.3s; }
@@ -49,7 +50,7 @@
       const { data, error } = await supabase.from('products').select('*');
       if (error) {
         console.error(error);
-        alert("Could not load from database. Using sample data.");
+        alert("Database connection failed. Using sample items.");
         menuItems = [
           {id:1, name:"Chicken Adobo", price:9.50, desc:"Classic Filipino dish"},
           {id:2, name:"Sinigang na Baboy", price:10.50, desc:"Tamarind pork soup"}
@@ -90,10 +91,10 @@
     }
 
     function toggleCart() {
-      alert("Cart clicked - " + cart.length + " item types (demo)");
+      alert("Cart clicked (demo)");
     }
 
-    // Start the site
+    // Start
     loadMenu();
   </script>
 </body>
