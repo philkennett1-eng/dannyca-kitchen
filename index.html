@@ -35,7 +35,7 @@
   </section>
 
   <script>
-    // === Supabase - declared ONLY ONCE ===
+    // Supabase - declared ONLY ONCE
     const supabaseUrl = 'https://tlyyakwgbdsjwcduvfxp.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRseXlha3dnYmRzandjZHV2ZnhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NDM3MzIsImV4cCI6MjA5NDQxOTczMn0.aAdqjwYaPufXmFhfiBqjxgM76h8KEgOQ24r-p4OUs0E';
     const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
@@ -47,7 +47,7 @@
       const { data, error } = await supabase.from('products').select('*');
       if (error) {
         console.error(error);
-        menuItems = [{id:1, name:"Chicken Adobo", price:9.50, desc:"Sample item (DB not loaded)"}];
+        menuItems = [{id:1, name:"Chicken Adobo", price:9.50, desc:"Sample item - DB not loaded"}];
       } else {
         menuItems = data || [];
       }
@@ -84,10 +84,10 @@
     }
 
     function toggleCart() {
-      alert("Cart clicked (demo mode)");
+      alert("Cart clicked (demo)");
     }
 
-    // Start
+    // Start the site
     loadMenu();
   </script>
 </body>
