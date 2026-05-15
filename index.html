@@ -5,57 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dannyca’s Kitchen</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     .menu-card { transition: all 0.3s; }
     .menu-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
   </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 p-8">
 
-  <header class="bg-white shadow sticky top-0">
-    <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between">
-      <div class="flex items-center gap-4">
-        <div class="w-14 h-14 bg-orange-600 rounded-2xl flex items-center justify-center text-white text-4xl font-bold">DK</div>
-        <h1 class="text-3xl font-bold">Dannyca’s Kitchen</h1>
-      </div>
-      <button onclick="toggleCart()" class="flex items-center gap-2 px-6 py-3 bg-orange-100 rounded-2xl">
-        <i class="fas fa-shopping-cart"></i> Cart (<span id="cart-count">0</span>)
-      </button>
-    </div>
-  </header>
+  <h1 class="text-4xl font-bold mb-8">Dannyca’s Kitchen</h1>
 
-  <section class="max-w-6xl mx-auto px-6 py-16">
-    <h2 class="text-5xl font-bold text-center mb-12">Our Menu</h2>
-    <div id="menu-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-  </section>
-
-  <!-- Cart -->
-  <div id="cart-panel" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-    <div class="bg-white w-full max-w-md mx-4 rounded-3xl p-6 max-h-[80vh] overflow-auto">
-      <h3 class="text-2xl font-bold mb-6">Your Cart</h3>
-      <div id="cart-content" class="space-y-4"></div>
-      <button onclick="checkout()" class="w-full mt-8 bg-green-600 text-white py-4 rounded-2xl">Checkout</button>
-      <button onclick="toggleCart()" class="w-full mt-3 text-gray-500">Close</button>
-    </div>
-  </div>
+  <div id="menu-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
   <script>
-    let cart = [];
-
     const menuItems = [
-      {id:1, name:"Lumpia Rolls", price:6.50, desc:"Crispy spring rolls"},
-      {id:2, name:"Chicken Adobo", price:9.50, desc:"Classic Filipino chicken"},
-      {id:3, name:"Sinigang na Baboy", price:10.50, desc:"Tamarind pork soup"},
-      {id:4, name:"Lechon Kawali", price:12.50, desc:"Crispy pork belly"},
-      {id:5, name:"Halo-Halo", price:6.99, desc:"Shaved ice dessert"}
+      {id:1, name:"Chicken Adobo", price:9.50, desc:"Classic Filipino dish"},
+      {id:2, name:"Sinigang na Baboy", price:10.50, desc:"Tamarind pork soup"},
+      {id:3, name:"Lechon Kawali", price:12.50, desc:"Crispy pork belly"},
+      {id:4, name:"Halo-Halo", price:6.99, desc:"Shaved ice dessert"}
     ];
 
     function renderMenu() {
       const container = document.getElementById('menu-container');
       container.innerHTML = menuItems.map(item => `
         <div class="menu-card bg-white p-6 rounded-3xl shadow">
-          <h3 class="font-semibold">${item.name}</h3>
+          <h3 class="font-semibold text-xl">${item.name}</h3>
           <p class="text-gray-600">${item.desc}</p>
           <div class="mt-4 flex justify-between">
             <span class="text-xl font-bold">£${item.price.toFixed(2)}</span>
@@ -66,37 +39,10 @@
     }
 
     function addToCart(id) {
-      const item = menuItems.find(i => i.id === id);
-      if (item) {
-        cart.push({...item, quantity: 1});
-        document.getElementById('cart-count').textContent = cart.length;
-        alert(`${item.name} added to cart`);
-      }
+      alert("Item added to cart (demo)");
     }
 
-    function toggleCart() {
-      const panel = document.getElementById('cart-panel');
-      panel.classList.toggle('hidden');
-      renderCart();
-    }
-
-    function renderCart() {
-      const content = document.getElementById('cart-content');
-      content.innerHTML = cart.map(item => `
-        <div class="flex justify-between py-2 border-b">
-          <div>${item.name} x${item.quantity}</div>
-          <div>£${(item.price * item.quantity).toFixed(2)}</div>
-        </div>
-      `).join('');
-    }
-
-    function checkout() {
-      alert("✅ Order placed! (Demo)");
-      cart = [];
-      toggleCart();
-    }
-
-    // Start the app
+    // Start
     renderMenu();
   </script>
 </body>
