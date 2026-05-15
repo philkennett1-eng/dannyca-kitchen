@@ -6,7 +6,6 @@
   <title>Dannyca’s Kitchen</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <!-- Supabase - loaded once -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     .menu-card { transition: all 0.3s; }
@@ -15,7 +14,6 @@
 </head>
 <body class="bg-gray-50">
 
-  <!-- Header -->
   <header class="bg-white shadow-md sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
       <div class="flex items-center gap-4">
@@ -31,14 +29,13 @@
     </div>
   </header>
 
-  <!-- Menu -->
   <section class="max-w-6xl mx-auto px-6 py-16">
     <h2 class="text-5xl font-bold text-center mb-12">Our Menu</h2>
     <div id="menu-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
   </section>
 
   <script>
-    // Supabase - declared only once
+    // === Supabase - declared ONLY ONCE ===
     const supabaseUrl = 'https://tlyyakwgbdsjwcduvfxp.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRseXlha3dnYmRzandjZHV2ZnhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NDM3MzIsImV4cCI6MjA5NDQxOTczMn0.aAdqjwYaPufXmFhfiBqjxgM76h8KEgOQ24r-p4OUs0E';
     const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
@@ -50,11 +47,7 @@
       const { data, error } = await supabase.from('products').select('*');
       if (error) {
         console.error(error);
-        alert("Database connection failed. Using sample items.");
-        menuItems = [
-          {id:1, name:"Chicken Adobo", price:9.50, desc:"Classic Filipino dish"},
-          {id:2, name:"Sinigang na Baboy", price:10.50, desc:"Tamarind pork soup"}
-        ];
+        menuItems = [{id:1, name:"Chicken Adobo", price:9.50, desc:"Sample item (DB not loaded)"}];
       } else {
         menuItems = data || [];
       }
@@ -91,7 +84,7 @@
     }
 
     function toggleCart() {
-      alert("Cart clicked (demo)");
+      alert("Cart clicked (demo mode)");
     }
 
     // Start
