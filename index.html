@@ -64,109 +64,101 @@
   </div>
 
   <script>
-    let cart = [];
+  let cart = [];
 
-    const menuItems = [
-      {id:1, name:"Chicken Adobo", price:9.50, desc:"Classic Filipino garlic-soy chicken"},
-      {id:2, name:"Sinigang na Baboy", price:10.50, desc:"Tamarind pork soup"},
-      {id:3, name:"Lechon Kawali", price:12.50, desc:"Crispy pork belly"},
-      {id:4, name:"Halo-Halo", price:6.99, desc:"Mixed shaved ice dessert"},
-      {id:5, name:"Lumpia Rolls", price:6.50, desc:"Crispy spring rolls"}
-    ];
+  const menuItems = [
+    {id:1, name:"Chicken Adobo", price:9.50, desc:"Classic Filipino garlic-soy chicken"},
+    {id:2, name:"Sinigang na Baboy", price:10.50, desc:"Tamarind pork soup"},
+    {id:3, name:"Lechon Kawali", price:12.50, desc:"Crispy pork belly"},
+    {id:4, name:"Halo-Halo", price:6.99, desc:"Shaved ice dessert"},
+    {id:5, name:"Lumpia Rolls", price:6.50, desc:"Crispy spring rolls"}
+  ];
 
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      document.getElementById('toast-text').textContent = message;
-      toast.classList.remove('hidden');
-      setTimeout(() => toast.classList.add('hidden'), 2500);
-    }
-
-    function renderMenu() {
-      const container = document.getElementById('menu-container');
-      container.innerHTML = menuItems.map(item => `
-        <div class="menu-card bg-white p-6 rounded-3xl shadow">
-          <h3 class="font-semibold text-xl">${item.name}</h3>
-          <p class="text-gray-600">${item.desc}</p>
-          <div class="mt-4 flex justify-between items-center">
-            <span class="text-xl font-bold">£${item.price.toFixed(2)}</span>
-            <button onclick="addToCart(${item.id})" class="bg-orange-600 text-white px-6 py-2 rounded-xl">Add</button>
-          </div>
+  function renderMenu() {
+    const container = document.getElementById('menu-container');
+    container.innerHTML = menuItems.map(item => `
+      <div class="menu-card bg-white p-6 rounded-3xl shadow">
+        <h3 class="font-semibold text-xl">${item.name}</h3>
+        <p class="text-gray-600">${item.desc}</p>
+        <div class="mt-4 flex justify-between items-center">
+          <span class="text-xl font-bold">£${item.price.toFixed(2)}</span>
+          <button onclick="addToCart(${item.id})" class="bg-orange-600 text-white px-6 py-2 rounded-xl">Add</button>
         </div>
-      `).join('');
-    }
+      </div>
+    `).join('');
+  }
 
-    function addToCart(id) {
-      const item = menuItems.find(i => i.id === id);
-      if (item) {
-        const existing = cart.find(i => i.id === id);
-        if (existing) {
-          existing.quantity = (existing.quantity || 1) + 1;
-        } else {
-          cart.push({...item, quantity: 1});
-        }
-        updateCartCount();
-        showToast(`${item.name} added to cart`);
+  function addToCart(id) {
+    const item = menuItems.find(i => i.id === id);
+    if (item) {
+      const existing = cart.find(i => i.id === id);
+      if (existing) {
+        existing.quantity = (existing.quantity || 1) + 1;
+      } else {
+        cart.push({...item, quantity: 1});
       }
-    }
-
-    function changeQuantity(index, delta) {
-      cart[index].quantity = (cart[index].quantity || 1) + delta;
-      if (cart[index].quantity < 1) cart[index].quantity = 1;
-      renderCart();
       updateCartCount();
     }
+  }
 
-    function removeFromCart(index) {
-      cart.splice(index, 1);
-      renderCart();
-      updateCartCount();
-    }
+  function changeQuantity(index, delta) {
+    cart[index].quantity = (cart[index].quantity || 1) + delta;
+    if (cart[index].quantity < 1) cart[index].quantity = 1;
+    renderCart();
+    updateCartCount();
+  }
 
-    function updateCartCount() {
-      document.getElementById('cart-count').textContent = cart.length;
-    }
+  function removeFromCart(index) {
+    cart.splice(index, 1);
+    renderCart();
+    updateCartCount();
+  }
 
-    function renderCart() {
-      const content = document.getElementById('cart-content');
-      let total = 0;
+  function updateCartCount() {
+    document.getElementById('cart-count').textContent = cart.length;
+  }
 
-      content.innerHTML = cart.map((item, index) => {
-        const itemTotal = item.price * (item.quantity || 1);
-        total += itemTotal;
-        return `
-          <div class="flex justify-between items-center border-b pb-4">
-            <div class="flex-1">
-              <p class="font-medium">${item.name}</p>
-              <p class="text-sm text-gray-500">£${item.price.toFixed(2)}</p>
-            </div>
-            <div class="flex items-center gap-3">
-              <button onclick="changeQuantity(${index}, -1)" class="w-8 h-8 border rounded hover:bg-gray-100">-</button>
-              <span class="w-8 text-center font-medium">${item.quantity || 1}</span>
-              <button onclick="changeQuantity(${index}, 1)" class="w-8 h-8 border rounded hover:bg-gray-100">+</button>
-              <button onclick="removeFromCart(${index})" class="ml-4 text-red-500 hover:text-red-700">Remove</button>
-            </div>
-          </div>`;
-      }).join('');
+  function renderCart() {
+    const content = document.getElementById('cart-content');
+    let total = 0;
 
-      document.getElementById('cart-total').textContent = '£' + total.toFixed(2);
-    }
+    content.innerHTML = cart.map((item, index) => {
+      const itemTotal = item.price * (item.quantity || 1);
+      total += itemTotal;
+      return `
+        <div class="flex justify-between items-center border-b pb-4">
+          <div class="flex-1">
+            <p class="font-medium">${item.name}</p>
+            <p class="text-sm text-gray-500">£${item.price.toFixed(2)}</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <button onclick="changeQuantity(${index}, -1)" class="w-8 h-8 border rounded hover:bg-gray-100">-</button>
+            <span class="w-8 text-center font-medium">${item.quantity || 1}</span>
+            <button onclick="changeQuantity(${index}, 1)" class="w-8 h-8 border rounded hover:bg-gray-100">+</button>
+            <button onclick="removeFromCart(${index})" class="ml-4 text-red-500 hover:text-red-700">Remove</button>
+          </div>
+        </div>`;
+    }).join('');
 
-    function toggleCart() {
-      const panel = document.getElementById('cart-panel');
-      panel.classList.toggle('hidden');
-      if (!panel.classList.contains('hidden')) renderCart();
-    }
+    document.getElementById('cart-total').textContent = '£' + total.toFixed(2);
+  }
 
-    function checkout() {
-      if (cart.length === 0) return;
-      alert("✅ Order placed successfully! (Demo mode)");
-      cart = [];
-      updateCartCount();
-      toggleCart();
-    }
+  function toggleCart() {
+    const panel = document.getElementById('cart-panel');
+    panel.classList.toggle('hidden');
+    if (!panel.classList.contains('hidden')) renderCart();
+  }
 
-    // Initialize
-    renderMenu();
-  </script>
+  function checkout() {
+    if (cart.length === 0) return;
+    alert("✅ Order placed successfully! (Demo mode)");
+    cart = [];
+    updateCartCount();
+    toggleCart();
+  }
+
+  // Initialize
+  renderMenu();
+</script>
 </body>
 </html>
