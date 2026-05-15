@@ -58,6 +58,26 @@
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="snacks"></div>
   </section>
 
+  <!-- Admin Panel -->
+  <section id="admin" class="max-w-6xl mx-auto px-6 py-20 bg-gray-100">
+    <h2 class="text-4xl font-bold text-center mb-10">Admin Panel</h2>
+    <div class="max-w-lg mx-auto bg-white p-8 rounded-3xl shadow">
+      <input type="password" id="admin-pass" placeholder="Enter admin password" class="w-full p-4 border rounded-2xl mb-6 text-center text-lg">
+      <button onclick="loginAdmin()" class="w-full bg-orange-600 hover:bg-orange-700 text-white py-4 rounded-2xl font-semibold">Login</button>
+
+      <div id="admin-content" class="hidden mt-8">
+        <h3 class="font-semibold mb-4">Add New Item</h3>
+        <input id="new-name" placeholder="Item Name" class="w-full p-3 border rounded-xl mb-3">
+        <input id="new-price" type="number" step="0.01" placeholder="Price (£)" class="w-full p-3 border rounded-xl mb-3">
+        <textarea id="new-desc" placeholder="Description" class="w-full p-3 border rounded-xl mb-4" rows="2"></textarea>
+        <button onclick="addNewItem()" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-semibold mb-8">Add Item</button>
+
+        <h3 class="font-semibold mb-4">Current Menu Items</h3>
+        <div id="admin-menu-list" class="space-y-3 max-h-96 overflow-auto"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- Cart -->
   <div id="cart-overlay" class="hidden fixed inset-0 bg-black/50 z-50" onclick="toggleCart()"></div>
   <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-auto">
@@ -66,15 +86,12 @@
         <h3 class="text-3xl font-bold">Your Cart</h3>
         <button onclick="toggleCart()" class="text-4xl text-gray-400 hover:text-black">×</button>
       </div>
-
       <div id="cart-items" class="space-y-6 mb-8"></div>
-
       <div class="border-t pt-6">
         <div class="flex justify-between text-lg mb-2"><span>Subtotal</span><span id="subtotal">£0.00</span></div>
         <div class="flex justify-between text-lg"><span>Delivery Fee</span><span id="delivery-fee">£3.99</span></div>
         <div class="flex justify-between text-2xl font-bold border-t pt-6 mt-6"><span>Total</span><span id="total">£0.00</span></div>
       </div>
-
       <button onclick="checkout()" class="w-full mt-10 bg-green-600 hover:bg-green-700 text-white py-5 rounded-2xl text-xl font-semibold">Proceed to Checkout →</button>
     </div>
   </div>
@@ -87,8 +104,7 @@
 
   <script>
     let cart = [];
-
-    const menuItems = [
+    let menuItems = [
       {id:1, name:"Lumpia Rolls", price:6.50, desc:"Crispy Filipino spring rolls", category:"Starters"},
       {id:2, name:"Calamares", price:8.50, desc:"Crispy fried squid", category:"Starters"},
       {id:3, name:"Chicken Adobo", price:9.50, desc:"Classic garlic-soy chicken", category:"Main Meals"},
@@ -98,6 +114,8 @@
       {id:7, name:"Calamansi Juice", price:3.50, desc:"Fresh Philippine lime drink", category:"Drinks"},
       {id:8, name:"Garlic Rice", price:3.00, desc:"Fragrant garlic rice", category:"Snacks"}
     ];
+
+    const ADMIN_PASSWORD = "admin123";
 
     function formatPrice(p) { return "£" + p.toFixed(2); }
 
@@ -109,7 +127,6 @@
         drinks: document.getElementById('drinks'),
         snacks: document.getElementById('snacks')
       };
-
       Object.keys(categories).forEach(key => categories[key].innerHTML = '');
 
       menuItems.forEach(item => {
@@ -122,7 +139,6 @@
               <button onclick="addToCart(${item.id})" class="bg-orange-600 text-white px-8 py-3 rounded-2xl hover:bg-orange-700">Add to Cart</button>
             </div>
           </div>`;
-        
         if (item.category === "Starters") categories.starters.innerHTML += html;
         else if (item.category === "Main Meals") categories.mains.innerHTML += html;
         else if (item.category === "Desserts") categories.desserts.innerHTML += html;
@@ -135,11 +151,8 @@
       const item = menuItems.find(i => i.id === id);
       if (item) {
         const existing = cart.find(i => i.id === id);
-        if (existing) {
-          existing.quantity = (existing.quantity || 1) + 1;
-        } else {
-          cart.push({...item, quantity: 1});
-        }
+        if (existing) existing.quantity = (existing.quantity || 1) + 1;
+        else cart.push({...item, quantity: 1});
         updateCartCount();
         showToast(`${item.name} added to cart`);
       }
@@ -172,7 +185,6 @@
       cart.forEach((item, index) => {
         const qty = item.quantity || 1;
         subtotal += item.price * qty;
-
         container.innerHTML += `
           <div class="flex justify-between items-center border-b pb-4">
             <div class="flex-1">
@@ -180,10 +192,10 @@
               <p class="text-sm text-gray-500">${formatPrice(item.price)}</p>
             </div>
             <div class="flex items-center gap-3">
-              <button onclick="changeQuantity(${index}, -1)" class="w-8 h-8 border rounded hover:bg-gray-100 text-lg">-</button>
-              <span class="w-8 text-center font-medium">${qty}</span>
-              <button onclick="changeQuantity(${index}, 1)" class="w-8 h-8 border rounded hover:bg-gray-100 text-lg">+</button>
-              <button onclick="removeFromCart(${index})" class="ml-6 text-red-500 hover:text-red-700">Remove</button>
+              <button onclick="changeQuantity(${index}, -1)" class="w-8 h-8 border rounded hover:bg-gray-100">-</button>
+              <span class="w-8 text-center">${qty}</span>
+              <button onclick="changeQuantity(${index}, 1)" class="w-8 h-8 border rounded hover:bg-gray-100">+</button>
+              <button onclick="removeFromCart(${index})" class="ml-4 text-red-500 hover:text-red-700">Remove</button>
             </div>
           </div>`;
       });
@@ -211,6 +223,31 @@
       cart = [];
       updateCartCount();
       toggleCart();
+    }
+
+    // Admin Functions
+    function loginAdmin() {
+      const pass = document.getElementById('admin-pass').value;
+      if (pass === ADMIN_PASSWORD) {
+        document.getElementById('admin-content').classList.remove('hidden');
+        renderAdminMenu();
+      } else {
+        alert("Incorrect password");
+      }
+    }
+
+    function renderAdminMenu() {
+      const list = document.getElementById('admin-menu-list') || document.createElement('div');
+      if (!document.getElementById('admin-menu-list')) {
+        const content = document.getElementById('admin-content');
+        content.innerHTML += '<div id="admin-menu-list" class="space-y-3 mt-6"></div>';
+      }
+      // Full render logic for edit/delete will be expanded in next step if needed
+      console.log("Admin logged in");
+    }
+
+    function addNewItem() {
+      alert("New item added (full edit/delete coming in next update)");
     }
 
     // Initialize
