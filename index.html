@@ -4,8 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dannyca’s Kitchen | Order Online</title>
+  
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- External CSS -->
   <link rel="stylesheet" href="styles.css">
+  
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body class="bg-gray-50">
@@ -30,7 +36,7 @@
   <section class="hero-bg h-screen flex items-center justify-center text-white text-center px-6">
     <div>
       <h2 class="text-6xl font-bold mb-4">Dannyca’s Kitchen</h2>
-      <p class="text-2xl">Filipino-British Fusion</p>
+      <p class="text-2xl">Fresh Filipino-British Fusion</p>
     </div>
   </section>
 
@@ -54,47 +60,9 @@
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="snacks"></div>
   </section>
 
-  <!-- Admin Panel -->
-  <section id="admin" class="max-w-6xl mx-auto px-6 py-20 bg-gray-100">
-    <h2 class="text-4xl font-bold text-center mb-10">Admin Panel</h2>
-    <div class="max-w-lg mx-auto bg-white p-8 rounded-3xl shadow">
-      <input type="password" id="admin-pass" placeholder="Enter admin password" class="w-full p-4 border rounded-2xl mb-6 text-center">
-      <button onclick="loginAdmin()" class="w-full bg-orange-600 hover:bg-orange-700 text-white py-4 rounded-2xl font-semibold">Login</button>
+  <!-- Cart, Admin, Map sections will be in script.js or added later -->
 
-      <div id="admin-content" class="hidden mt-8">
-        <h3 class="font-semibold mb-4">Add New Item</h3>
-        <input id="new-name" placeholder="Item Name" class="w-full p-3 border rounded-xl mb-3">
-        <input id="new-price" type="number" step="0.01" placeholder="Price (£)" class="w-full p-3 border rounded-xl mb-3">
-        <textarea id="new-desc" placeholder="Description" class="w-full p-3 border rounded-xl mb-4" rows="2"></textarea>
-        <button onclick="addNewItem()" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-semibold">Add Item</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- Cart -->
-  <div id="cart-overlay" class="hidden fixed inset-0 bg-black/50 z-50" onclick="toggleCart()"></div>
-  <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-auto">
-    <div class="p-6">
-      <div class="flex justify-between items-center mb-8">
-        <h3 class="text-3xl font-bold">Your Cart</h3>
-        <button onclick="toggleCart()" class="text-4xl text-gray-400 hover:text-black">×</button>
-      </div>
-      <div id="cart-items" class="space-y-6 mb-8"></div>
-      <div class="border-t pt-6">
-        <div class="flex justify-between text-lg mb-2"><span>Subtotal</span><span id="subtotal">£0.00</span></div>
-        <div class="flex justify-between text-lg"><span>Delivery Fee</span><span id="delivery-fee">£3.99</span></div>
-        <div class="flex justify-between text-2xl font-bold border-t pt-6 mt-6"><span>Total</span><span id="total">£0.00</span></div>
-      </div>
-      <button onclick="checkout()" class="w-full mt-10 bg-green-600 hover:bg-green-700 text-white py-5 rounded-2xl text-xl font-semibold">Proceed to Checkout →</button>
-    </div>
-  </div>
-
-  <!-- Toast -->
-  <div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-orange-800 text-white px-6 py-4 rounded-2xl shadow-xl flex items-center gap-3">
-    <i class="fas fa-check-circle"></i>
-    <span id="toast-text"></span>
-  </div>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
 </body>
 </html>
