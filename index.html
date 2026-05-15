@@ -90,18 +90,21 @@
 
   function addToCart(id) {
     const item = menuItems.find(i => i.id === id);
-    if (item) {
-      const existing = cart.find(i => i.id === id);
-      if (existing) {
-        existing.quantity = (existing.quantity || 1) + 1;
-      } else {
-        cart.push({...item, quantity: 1});
-      }
-      updateCartCount();
+    if (!item) return;
+
+    const existing = cart.find(i => i.id === id);
+    if (existing) {
+      existing.quantity = (existing.quantity || 1) + 1;
+    } else {
+      cart.push({...item, quantity: 1});
     }
+
+    updateCartCount();
+    // showToast(`${item.name} added`);   // Uncomment if you want toast
   }
 
   function changeQuantity(index, delta) {
+    if (!cart[index]) return;
     cart[index].quantity = (cart[index].quantity || 1) + delta;
     if (cart[index].quantity < 1) cart[index].quantity = 1;
     renderCart();
@@ -109,13 +112,15 @@
   }
 
   function removeFromCart(index) {
+    if (index < 0 || index >= cart.length) return;
     cart.splice(index, 1);
     renderCart();
     updateCartCount();
   }
 
   function updateCartCount() {
-    document.getElementById('cart-count').textContent = cart.length;
+    const countEl = document.getElementById('cart-count');
+    if (countEl) countEl.textContent = cart.length;
   }
 
   function renderCart() {
@@ -123,7 +128,8 @@
     let total = 0;
 
     content.innerHTML = cart.map((item, index) => {
-      const itemTotal = item.price * (item.quantity || 1);
+      const qty = item.quantity || 1;
+      const itemTotal = item.price * qty;
       total += itemTotal;
       return `
         <div class="flex justify-between items-center border-b pb-4">
@@ -133,20 +139,23 @@
           </div>
           <div class="flex items-center gap-3">
             <button onclick="changeQuantity(${index}, -1)" class="w-8 h-8 border rounded hover:bg-gray-100">-</button>
-            <span class="w-8 text-center font-medium">${item.quantity || 1}</span>
+            <span class="w-8 text-center font-medium">${qty}</span>
             <button onclick="changeQuantity(${index}, 1)" class="w-8 h-8 border rounded hover:bg-gray-100">+</button>
             <button onclick="removeFromCart(${index})" class="ml-4 text-red-500 hover:text-red-700">Remove</button>
           </div>
         </div>`;
     }).join('');
 
-    document.getElementById('cart-total').textContent = '£' + total.toFixed(2);
+    const totalEl = document.getElementById('cart-total');
+    if (totalEl) totalEl.textContent = '£' + total.toFixed(2);
   }
 
   function toggleCart() {
     const panel = document.getElementById('cart-panel');
     panel.classList.toggle('hidden');
-    if (!panel.classList.contains('hidden')) renderCart();
+    if (!panel.classList.contains('hidden')) {
+      renderCart();
+    }
   }
 
   function checkout() {
