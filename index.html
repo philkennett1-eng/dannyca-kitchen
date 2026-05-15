@@ -66,22 +66,38 @@
   <script>
   let cart = [];
 
-  const menuItems = [
-    {id:1, name:"Chicken Adobo", price:9.50, desc:"Classic Filipino garlic-soy chicken"},
-    {id:2, name:"Sinigang na Baboy", price:10.50, desc:"Tamarind pork soup"},
-    {id:3, name:"Lechon Kawali", price:12.50, desc:"Crispy pork belly"},
-    {id:4, name:"Halo-Halo", price:6.99, desc:"Shaved ice dessert"},
-    {id:5, name:"Lumpia Rolls", price:6.50, desc:"Crispy spring rolls"}
-  ];
+  // Supabase Connection
+  const supabaseUrl = 'https://tlyyakwgbdsjwcduvfxp.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRseXlha3dnYmRzandjZHV2ZnhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NDM3MzIsImV4cCI6MjA5NDQxOTczMn0.aAdqjwYaPufXmFhfiBqjxgM76h8KEgOQ24r-p4OUs0E';
+  const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
+
+  let menuItems = [];
+
+  // Load from Database
+  async function loadMenuFromDB() {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .order('category');
+
+    if (error) {
+      console.error("Database error:", error);
+      alert("Could not load from database. Using sample items.");
+      menuItems = [ /* fallback items */ ];
+    } else {
+      menuItems = data || [];
+    }
+    renderMenu();
+  }
 
   function renderMenu() {
     const container = document.getElementById('menu-container');
     container.innerHTML = menuItems.map(item => `
       <div class="menu-card bg-white p-6 rounded-3xl shadow">
         <h3 class="font-semibold text-xl">${item.name}</h3>
-        <p class="text-gray-600">${item.desc}</p>
+        <p class="text-gray-600">${item.description || item.desc || ''}</p>
         <div class="mt-4 flex justify-between items-center">
-          <span class="text-xl font-bold">£${item.price.toFixed(2)}</span>
+          <span class="text-xl font-bold">£${parseFloat(item.price).toFixed(2)}</span>
           <button onclick="addToCart(${item.id})" class="bg-orange-600 text-white px-6 py-2 rounded-xl">Add</button>
         </div>
       </div>
@@ -98,7 +114,6 @@
     } else {
       cart.push({...item, quantity: 1});
     }
-
     updateCartCount();
   }
 
@@ -117,12 +132,9 @@
     updateCartCount();
   }
 
-  // FIXED: Now shows TOTAL quantity, not just number of lines
   function updateCartCount() {
     let totalItems = 0;
-    cart.forEach(item => {
-      totalItems += (item.quantity || 1);
-    });
+    cart.forEach(item => totalItems += (item.quantity || 1));
     const countEl = document.getElementById('cart-count');
     if (countEl) countEl.textContent = totalItems;
   }
@@ -169,7 +181,7 @@
   }
 
   // Initialize
-  renderMenu();
+  loadMenuFromDB();
 </script>
 </body>
 </html>
