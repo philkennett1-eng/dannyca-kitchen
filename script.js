@@ -1,4 +1,4 @@
-// script.js - Clean & Working Version
+// script.js - Clean Version
 
 console.log("Script loaded successfully");
 
@@ -12,7 +12,8 @@ let menuItems = [];
 
 // Load menu from database
 async function loadMenu() {
-  console.log("Loading menu from Supabase...");
+  console.log("Trying to load menu from Supabase...");
+  
   const { data, error } = await supabase
     .from('products')
     .select('*')
@@ -20,11 +21,12 @@ async function loadMenu() {
 
   if (error) {
     console.error("Database error:", error);
-    document.getElementById('menu-container').innerHTML = `<p class="text-red-500 p-8">Error loading menu: ${error.message}</p>`;
+    const container = document.getElementById('menu-container');
+    if (container) container.innerHTML = `<p class="text-red-500 p-8">Error: ${error.message}</p>`;
     return;
   }
 
-  console.log("Menu loaded successfully:", data);
+  console.log("Menu data received:", data);
   menuItems = data || [];
   renderMenu();
 }
@@ -49,13 +51,14 @@ function addToCart(id) {
   const item = menuItems.find(i => i.id === id);
   if (item) {
     cart.push({...item, quantity: 1});
-    document.getElementById('cart-count').textContent = cart.length;
+    const countEl = document.getElementById('cart-count');
+    if (countEl) countEl.textContent = cart.length;
     alert(`${item.name} added to cart`);
   }
 }
 
 function toggleCart() {
-  alert("Cart clicked - " + cart.length + " items");
+  alert("Cart clicked - " + cart.length + " items (demo)");
 }
 
 // Run when page loads
