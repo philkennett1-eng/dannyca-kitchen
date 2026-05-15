@@ -1,4 +1,5 @@
-// script.js
+// script.js - Clean version - supabase declared only here
+
 const supabaseUrl = 'https://tlyyakwgbdsjwcduvfxp.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRseXlha3dnYmRzandjZHV2ZnhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NDM3MzIsImV4cCI6MjA5NDQxOTczMn0.aAdqjwYaPufXmFhfiBqjxgM76h8KEgOQ24r-p4OUs0E';
 
@@ -11,7 +12,7 @@ async function loadMenu() {
   const { data, error } = await supabase.from('products').select('*');
   if (error) {
     console.error(error);
-    menuItems = [{id:1, name:"Chicken Adobo", price:9.50, desc:"Sample"}];
+    menuItems = [{id:1, name:"Chicken Adobo", price:9.50, desc:"Sample item - DB issue"}];
   } else {
     menuItems = data || [];
   }
@@ -24,7 +25,7 @@ function renderMenu() {
     <div class="bg-white p-6 rounded-3xl shadow">
       <h3 class="font-semibold text-xl">${item.name}</h3>
       <p class="text-gray-600">${item.description || item.desc || ''}</p>
-      <div class="mt-4 flex justify-between">
+      <div class="mt-4 flex justify-between items-center">
         <span class="text-xl font-bold">£${parseFloat(item.price).toFixed(2)}</span>
         <button onclick="addToCart(${item.id})" class="bg-orange-600 text-white px-6 py-2 rounded-xl">Add</button>
       </div>
